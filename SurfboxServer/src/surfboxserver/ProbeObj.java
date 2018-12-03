@@ -54,7 +54,7 @@ public abstract class ProbeObj {
     ArrayList<String> keys = new ArrayList<>();
     
     protected ProbeObj(String name, float min, float max, float target, float tolerance) {
-        this.type = type;
+        this.type = name;
         this.min = min;
         this.max = max;
         this.target = target;

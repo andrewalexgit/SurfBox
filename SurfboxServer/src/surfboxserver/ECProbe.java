@@ -1,28 +1,28 @@
 package surfboxserver;
 
 /*
-*	PH Probe Object
+*	EC Probe Object
 *
 *	Developed by, Andrew C.
 **/
 
-public class PHProbe extends ProbeObj {
+public class ECProbe extends ProbeObj {
     
-    public PHProbe(float min, float max, float target, float tolerance) {
-        super("ph", min, max, target, tolerance);
+    public ECProbe(float min, float max, float target, float tolerance) {
+        super("ec", min, max, target, tolerance);
     }
     
-    public PHProbe() {
-        this(7.0f, 9.0f, 8.5f, 0.2f);
+    public ECProbe() {
+        this(1.022f, 1.030f, 1.026f, 0.001f);
     }
-    
+
     /*
      * Checks the status of all parameters
     **/
     @Override
     public String paramsCheck() {
         
-        String message = "PH is ";
+        String message = "EC is ";
         
         if (isHigh()) {
             message += "high out of range";
