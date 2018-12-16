@@ -15,6 +15,17 @@ public class SurfboxServer {
         
         boolean run = true;
         String data = "";
+        String cla = "";
+        
+        for (int i = 0; i < args.length; i++) {
+            cla += args[i];
+        }
+        
+        if (cla.equals("config")) {
+            SurfboxConfigManager.run();
+        }
+        
+        System.out.println("Surfbox 3 - Smart Aquarium Controller Software\n");
         
         /*
          * Probe Configuration
@@ -63,44 +74,13 @@ public class SurfboxServer {
         
         if (server.setup()) {
             System.out.print("Done!\n");
-            run = true;
         } else {
             System.out.println("Failed to set up server.");
             run = false;
         }
         
-        /*
-         * Main Program Loop
-        **/
-        
-        Commands cmd = new Commands();
-        
         while(run) {
             
-            data = server.listen();
-            System.out.println(data);
-            int p = -1;
-            
-            if (!data.equals("lsall")) {
-                try {
-                    p = Integer.parseInt(data.substring(0, 1));
-                    System.out.println(cmd.parsecmd(probes[p], data));
-                    server.write(cmd.parsecmd(probes[p], data));
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    server.write("Probe does not exist at address " + p);
-                } catch (NumberFormatException e) {
-                    server.write("Invalid command");
-                }
-            } else {
-                
-                String rtr = "";
-                
-                for (int i = 0; i < PROBE_COUNT; i++) {
-                    rtr += "([" + i + "]" + probes[i].type() + ")";
-                }
-                
-                server.write(rtr + "\r");
-            }
         }  
     }
 }
