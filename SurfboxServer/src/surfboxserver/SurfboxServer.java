@@ -45,19 +45,28 @@ public class SurfboxServer {
         int k = 0; // Iterator for probe loading algorithm
         
         for (int i = 0; i < TEMP_PROBE_COUNT; i++) {
-            probes[k] = new TemperatureProbe();
+            probes[k] = new TemperatureProbe(Float.valueOf(config.getConfig("tempmin")),
+                                             Float.valueOf(config.getConfig("tempmax")),
+                                             Float.valueOf(config.getConfig("tempperf")),
+                                             Float.valueOf(config.getConfig("temptol")), (byte) 1);
             System.out.println("Temperature probes...[" + i + "]");
             k++;
         }
         
         for (int i = 0; i < EC_PROBE_COUNT; i++) {
-            probes[k] = new ECProbe();
+            probes[k] = new ECProbe(Float.valueOf(config.getConfig("ecmin")),
+                                    Float.valueOf(config.getConfig("ecmax")),
+                                    Float.valueOf(config.getConfig("ecperf")),
+                                    Float.valueOf(config.getConfig("ectol")));
             System.out.println("EC probes...[" + i + "]");
             k++;
         }
         
         for (int i = 0; i < PH_PROBE_COUNT; i++) {
-            probes[k] = new PHProbe();
+            probes[k] = new PHProbe(Float.valueOf(config.getConfig("phmin")),
+                                    Float.valueOf(config.getConfig("phmax")),
+                                    Float.valueOf(config.getConfig("phperf")),
+                                    Float.valueOf(config.getConfig("phtol")));
             System.out.println("PH probes...[" + i + "]");
             k++;
         }
