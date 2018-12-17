@@ -16,7 +16,7 @@ SurfBox is a simple platform for monitoring parameters, controlling devices, and
 
 What can I find in the repository here?
 The entire device is comprised of several moving parts such as microcontrollers and circuitry and of course and an internet
-capable client. What you will find here in this repository is mostly comrpised the backend server platform to support the 
+capable client. What you will find here is the backend server platform to support the 
 SurfBox project. 
 
 Goals of SurfBox:
