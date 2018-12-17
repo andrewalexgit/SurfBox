@@ -2,6 +2,7 @@ package surfboxserver;
 
 import grab.ServerConnection;
 import grab.ServerObj;
+import java.util.Scanner;
 
 /*
 *	The main class for SurfBox2 - Server
@@ -13,6 +14,7 @@ public class SurfboxServer {
 
     public static void main(String[] args) {
         
+        Scanner sc;
         boolean run = true;
         String data = "";
         String cla = "";
@@ -48,8 +50,9 @@ public class SurfboxServer {
             probes[k] = new TemperatureProbe(Float.valueOf(config.getConfig("tempmin")),
                                              Float.valueOf(config.getConfig("tempmax")),
                                              Float.valueOf(config.getConfig("tempperf")),
-                                             Float.valueOf(config.getConfig("temptol")), (byte) 1);
-            System.out.println("Temperature probes...[" + i + "]");
+                                             Float.valueOf(config.getConfig("temptol")),
+                                             Byte.valueOf(config.getConfig("tempunit")));
+            System.out.println("Temperature probes...[" + i + "]" + " -> Address: " + k);
             k++;
         }
         
@@ -58,7 +61,7 @@ public class SurfboxServer {
                                     Float.valueOf(config.getConfig("ecmax")),
                                     Float.valueOf(config.getConfig("ecperf")),
                                     Float.valueOf(config.getConfig("ectol")));
-            System.out.println("EC probes...[" + i + "]");
+            System.out.println("EC probes...[" + i + "]" + " -> Address: " + k);
             k++;
         }
         
@@ -67,7 +70,7 @@ public class SurfboxServer {
                                     Float.valueOf(config.getConfig("phmax")),
                                     Float.valueOf(config.getConfig("phperf")),
                                     Float.valueOf(config.getConfig("phtol")));
-            System.out.println("PH probes...[" + i + "]");
+            System.out.println("PH probes...[" + i + "]" + " -> Address: " + k);
             k++;
         }
         
@@ -88,8 +91,47 @@ public class SurfboxServer {
             run = false;
         }
         
+        /*
+         * Main Program Loop
+        **/
+        
+        CommandHandler cmd = new CommandHandler();
+        
         while(run) {
             
-        }  
+            data = server.listen();
+            
+            // Handles client disconnecting events
+            if (data.equals("null") || data.equals("kill")) {
+                System.out.println("Client disconnected, wating for new connection...");
+                server.kill();
+                
+                if (server.setup()) {
+                    System.out.print("Done!\n");
+                    data = "";
+                    run = true;
+                } else {
+                    System.out.println("Failed to set up server.");
+                    run = false;
+                }
+            } else {
+            
+                try {
+                    
+                    // Parses probe ID
+                    sc = new Scanner(data);
+                    int p = sc.nextInt();
+            
+                    // Decides what to do with data recieved from client and serves response
+                    String packet = cmd.parsecmd(probes[p], sc);
+                    server.write(packet);
+                    
+                } catch (Exception e) {
+                    
+                    server.write("Invalid data, check probe ID");
+                    
+                }
+            }
+        }   
     }
 }
