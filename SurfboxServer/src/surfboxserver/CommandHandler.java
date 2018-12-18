@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class CommandHandler {
     
     /*
-     * Parses packets recieved from the client, and returns a new packet to be served back
+     * Parses packets recieved from the client, and returns a new packet to be served back - PROBES
     **/
     public String parsecmd(ProbeObj probe, Scanner sc) {
         
@@ -20,8 +20,6 @@ public class CommandHandler {
         
         // Empty string to store new packet
         String rtr = "";
-        
-        System.out.println(command);
         
         // Decides what to do with given command
         switch(command) {
@@ -52,6 +50,43 @@ public class CommandHandler {
                 rtr = "Invalid command";
             break;
         } 
+        
+        System.out.println(rtr);
+        return rtr + "\r";
+    }
+    
+    /*
+     * Parses packets recieved from the client, and returns a new packet to be served back - DEVICES
+    **/
+    public String parsecmd(Device device, Scanner sc) {
+        
+        // Commands are required to be from string location 1 to 5
+        String command = sc.next();
+        
+        // Empty string to store new packet
+        String rtr = "";
+        
+        switch (command) {
+            
+            case "switchon":
+                device.setDevice(true);
+                rtr = device.toString();
+            break;
+            
+            case "switchoff":
+                device.setDevice(false);
+                rtr = device.toString();
+            break;
+            
+            case "getd": 
+                rtr = String.valueOf(device.status);
+            break;
+            
+            default:
+                rtr = "Invalid command";
+            break;
+            
+        }
         
         return rtr + "\r";
     }

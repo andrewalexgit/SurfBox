@@ -14,11 +14,34 @@ public class SurfboxServer {
 
     public static void main(String[] args) {
         
+        /*
+         * Instance of configuration object
+        **/
+        Configuration config = new Configuration("/Users/andrewcampagna/NetBeansProjects/SurfboxServer/src/surfboxserver/config.properties");
+        
+        /*
+         * Scanner reference
+        **/
         Scanner sc;
+        
+        /*
+         * Main program flag
+        **/
         boolean run = true;
+        
+        /*
+         * Holds data from client
+        **/
         String data = "";
+        
+        /*
+         * Holds command line argument
+        **/
         String cla = "";
         
+        /*
+         * Check for command line arguments
+        **/
         for (int i = 0; i < args.length; i++) {
             cla += args[i];
         }
@@ -27,12 +50,12 @@ public class SurfboxServer {
             SurfboxConfigManager.run();
         }
         
+        // Main program welcome message
         System.out.println("Surfbox 3 - Smart Aquarium Controller Software\n");
         
         /*
          * Probe Configuration
         **/
-        Configuration config = new Configuration("/Users/andrewcampagna/NetBeansProjects/SurfboxServer/src/surfboxserver/config.properties");
         final int TEMP_PROBE_COUNT = Integer.valueOf(config.getConfig("temp"));
         final int EC_PROBE_COUNT = Integer.valueOf(config.getConfig("ec"));
         final int PH_PROBE_COUNT = Integer.valueOf(config.getConfig("ph"));
@@ -71,6 +94,28 @@ public class SurfboxServer {
                                     Float.valueOf(config.getConfig("phperf")),
                                     Float.valueOf(config.getConfig("phtol")));
             System.out.println("PH probes...[" + i + "]" + " -> Address: " + k);
+            k++;
+        }
+        
+        System.out.print("Done!\n");
+        
+        /*
+         * Device Configuration
+        **/
+        final int OUTLET_DEVICE_COUNT = Integer.valueOf(config.getConfig("outlets"));
+        final int DEVICE_COUNT = OUTLET_DEVICE_COUNT;
+        Device[] devices = new Device[DEVICE_COUNT];
+        
+        /*
+         * Build device objects
+        **/
+        System.out.print("Setting up devices...[" + DEVICE_COUNT + "]\n");
+        
+        k = 0; // Iterator for device loading algorithm
+        
+        for (int i = 0; i < OUTLET_DEVICE_COUNT; i++) {
+            devices[k] = new Outlet("outlet" + String.valueOf(i), (byte) i, false);
+            System.out.println("Outlet...[" + i + "]" + " -> Address: " + k);
             k++;
         }
         
@@ -116,20 +161,21 @@ public class SurfboxServer {
                 }
             } else {
             
+                sc = new Scanner(data);
+                
                 try {
-                    
-                    // Parses probe ID
-                    sc = new Scanner(data);
-                    int p = sc.nextInt();
-            
-                    // Decides what to do with data recieved from client and serves response
-                    String packet = cmd.parsecmd(probes[p], sc);
-                    server.write(packet);
-                    
+                    // Parse packet header
+                    String header = sc.next();
+                
+                    if (header.equals("p")) {
+                       int p = sc.nextInt();
+                       server.write(cmd.parsecmd(probes[p], sc));
+                    } else if (header.equals("d")) {
+                        int d = sc.nextInt();
+                        server.write(cmd.parsecmd(devices[d], sc));
+                    }
                 } catch (Exception e) {
-                    
-                    server.write("Invalid data, check probe ID");
-                    
+                    server.write("The server does not understand your request.");
                 }
             }
         }   
