@@ -1,17 +1,48 @@
 package surfboxserver;
 
 /*
-*	Configurable Interface
+*	Surfbox 3 - Configurable Interface
 *
 *	Developed by, Andrew C.
+*       
 **/
 
 public interface Configurable {
     
-    public String getConfig(String key); // Get Property
+    /*
+     * Get probe configuration
+    **/
+    public String getProbeConfig(int index, String key);
     
-    public void setConfig(String key, String value); // Updates Property Value
+    /*
+     * Get device configuration
+    **/
+    public String getDeviceConfig(int index, String key);
     
-    public void save(); // Saves all configuration changes
+    /*
+     * Update probe configuration
+    **/
+    public void updateProbeConfiguration(int index, String key, String value);
+    
+    /*
+     * Update device configuration
+    **/
+    public void updateDeviceConfiguration(int index, String key, String value);
+    
+    /*
+     * Get probe count
+    **/
+    public int getProbeCount();
+    
+    /*
+     * Get device count
+    **/
+    public int getDeviceCount();
+    
+    /*
+     * Print new JSON API
+    **/
+    public void updateAPI();
+    
     
 }

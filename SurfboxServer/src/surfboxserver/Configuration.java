@@ -1,84 +1,126 @@
 package surfboxserver;
 
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /*
-*	Server Configuration
+*	Surfbox 3 - Configuration Handler
 *
 *	Developed by, Andrew C.
+*       
+*       Additional credits to Clifton Labs for JSON support
 **/
 
 public class Configuration implements Configurable {
-    
+
     /*
-     * Properties object
+     * Holds probe configuration settings
     **/
-    private Properties properties;
-    
+    JSONArray probes;
+
     /*
-     * Input Stream for reading properties file
+     * Holds device configuration settings
     **/
-    private InputStream input;
-    
+    JSONArray devices;
+
     /*
-     * Output Stream for saving properties file
+     *  JSON Parser Object
     **/
-    private FileOutputStream out;
-    
+    final private static JSONParser PARSER = new JSONParser();
+
     /*
-     * Stores configuration filepath
+     * JSON Object
     **/
-    private String filename;
-    
-    public Configuration(String filename) {
-        
-        properties = new Properties();
-        
-        this.filename = filename;
-        
+    JSONObject configurationObject;
+
+    /*
+     * Root object
+    **/
+    Object obj;
+
+    public Configuration() {
         try {
-            input = new FileInputStream(filename);
-            properties.load(input);
+            obj = PARSER.parse(new FileReader("config/data.json"));
+            configurationObject = (JSONObject) obj;
+            probes = (JSONArray) configurationObject.get("probes");
+            devices = (JSONArray) configurationObject.get("devices");
         } catch (FileNotFoundException ex) {
-            //<10> Properties file now found
-            System.out.println("<10>");
-        } catch (IOException ex) {
-            //<11> Error loading properties file
-            System.out.println("<11>");
+            Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException | ParseException ex) {
+            Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /*
-     *  Returns value stored in properties file associated with a specific key
+     * Get probe configuration
     **/
     @Override
-    public String getConfig(String key) {
-        return properties.getProperty(key);
+    public String getProbeConfig(int index, String key) {
+        JSONObject probe = (JSONObject) probes.get(index);
+        return (String) probe.get(key);
+    }
+
+    /*
+     * Get device configuration
+    **/
+    @Override
+    public String getDeviceConfig(int index, String key) {
+        JSONObject device = (JSONObject) devices.get(index);
+        return (String) device.get(key);
+    }
+
+    /*
+     * Update probe configuration
+    **/
+    @Override
+    public void updateProbeConfiguration(int index, String key, String value) {
+        JSONObject probe = (JSONObject) probes.get(index);
+        probe.put(key, value);
+    }
+
+    /*
+     * Update device configuration
+    **/
+    @Override
+    public void updateDeviceConfiguration(int index, String key, String value) {
+        JSONObject device = (JSONObject) devices.get(index);
+        device.put(key, value);
     }
     
     /*
-     *  Updates value stored in properties file associated with a specific key
+     * Get probe count
     **/
     @Override
-    public void setConfig(String key, String value) {
-        properties.setProperty(key, value);
+    public int getProbeCount() {
+        return probes.size();
     }
     
     /*
-     *  Save configration changes
+     * Get device count
     **/
     @Override
-    public void save() {
-        try {
-            properties.store(new FileOutputStream(filename), "SBSCM3");
-        } catch (IOException ex) {
+    public int getDeviceCount() {
+        return devices.size();
+    }
+
+    /*
+     * Print new JSON API
+    **/
+    @Override
+    public void updateAPI() {
+        try (PrintWriter writer = new PrintWriter(new File("config/data.json"))) {
+            writer.print("");
+            writer.print(configurationObject);
+        } catch (FileNotFoundException ex) {
             Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
