@@ -2,125 +2,112 @@ package surfboxserver;
 
 import grab.ServerConnection;
 import grab.ServerObj;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.json.simple.parser.ParseException;
 
 /*
-*	The main class for SurfBox2 - Server
+*	The main class for SurfBox3 - Server
 *
 *	Developed by, Andrew C.
 **/
-
 public class SurfboxServer {
 
     public static void main(String[] args) {
-        
-        /*
-         * Instance of configuration object
-        **/
-        Configuration config = new Configuration("/Users/andrewcampagna/NetBeansProjects/SurfboxServer/src/surfboxserver/config.properties");
-        
+
         /*
          * Scanner reference
         **/
         Scanner sc;
-        
+
         /*
          * Main program flag
         **/
         boolean run = true;
-        
+
         /*
          * Holds data from client
         **/
         String data = "";
-        
+
         /*
          * Holds command line argument
         **/
         String cla = "";
-        
+
         /*
          * Check for command line arguments
-        **/
-        for (int i = 0; i < args.length; i++) {
-            cla += args[i];
+         **/
+        for (String arg : args) {
+            cla += arg;
         }
-        
+
         if (cla.equals("config")) {
-            SurfboxConfigManager.run();
+            try {
+                SurfboxConfigManager.runConfigManager();
+            } catch (IOException | ParseException ex) {
+                Logger.getLogger(SurfboxServer.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        
+
         // Main program welcome message
         System.out.println("Surfbox 3 - Smart Aquarium Controller Software\n");
-        
+
         /*
-         * Probe Configuration
+         * Initialize probes and devices
         **/
-        final int TEMP_PROBE_COUNT = Integer.valueOf(config.getConfig("temp"));
-        final int EC_PROBE_COUNT = Integer.valueOf(config.getConfig("ec"));
-        final int PH_PROBE_COUNT = Integer.valueOf(config.getConfig("ph"));
-        final int PROBE_COUNT = TEMP_PROBE_COUNT + EC_PROBE_COUNT + PH_PROBE_COUNT;
-        ProbeObj[] probes = new ProbeObj[PROBE_COUNT];
-        
-        /*
-         * Build probe objects
-        **/
-        System.out.print("Setting up probes...[" + PROBE_COUNT + "]\n");
-        
-        int k = 0; // Iterator for probe loading algorithm
-        
-        for (int i = 0; i < TEMP_PROBE_COUNT; i++) {
-            probes[k] = new TemperatureProbe(Float.valueOf(config.getConfig("tempmin")),
-                                             Float.valueOf(config.getConfig("tempmax")),
-                                             Float.valueOf(config.getConfig("tempperf")),
-                                             Float.valueOf(config.getConfig("temptol")),
-                                             Byte.valueOf(config.getConfig("tempunit")));
-            System.out.println("Temperature probes...[" + i + "]" + " -> Address: " + k);
-            k++;
+        Configuration config = new Configuration();
+        ArrayList<ProbeObj> probes = new ArrayList<>();
+        ArrayList<Device> devices = new ArrayList<>();
+
+        System.out.println("Loading (" + config.getProbeCount() + ") probes...");
+
+        // Load Probe objects
+        for (int i = 0; i < config.getProbeCount(); i++) {
+
+            switch (config.getProbeConfig(i, "type")) {
+                case "temp":
+                    probes.add(new TemperatureProbe());
+                    System.out.println("Set up temperature probe named " + config.getProbeConfig(i, "name") + " address " + i);
+                    break;
+                case "ec":
+                    probes.add(new ECProbe());
+                    System.out.println("Set up conductivity probe named " + config.getProbeConfig(i, "name") + " address " + i);
+                    break;
+                case "ph":
+                    probes.add(new PHProbe());
+                    System.out.println("Set up pH probe named " + config.getProbeConfig(i, "name") + " address " + i);
+                    break;
+                default:
+                    break;
+            }
+
         }
-        
-        for (int i = 0; i < EC_PROBE_COUNT; i++) {
-            probes[k] = new ECProbe(Float.valueOf(config.getConfig("ecmin")),
-                                    Float.valueOf(config.getConfig("ecmax")),
-                                    Float.valueOf(config.getConfig("ecperf")),
-                                    Float.valueOf(config.getConfig("ectol")));
-            System.out.println("EC probes...[" + i + "]" + " -> Address: " + k);
-            k++;
+
+        System.out.println("Done!");
+        System.out.println("Loading (" + config.getDeviceCount() + ") devices...");
+
+        // Load Device objects - Change to switch statement when new device objects are created
+        for (int i = 0; i < config.getDeviceCount(); i++) {
+
+            switch (config.getDeviceConfig(i, "type")) {
+
+                case "outlet":
+                    devices.add(new Outlet());
+                    System.out.println("Set up outlet device named " + config.getDeviceConfig(i, "name") + " address " + i);
+                    break;
+
+                default:
+                    break;
+            }
+
         }
-        
-        for (int i = 0; i < PH_PROBE_COUNT; i++) {
-            probes[k] = new PHProbe(Float.valueOf(config.getConfig("phmin")),
-                                    Float.valueOf(config.getConfig("phmax")),
-                                    Float.valueOf(config.getConfig("phperf")),
-                                    Float.valueOf(config.getConfig("phtol")));
-            System.out.println("PH probes...[" + i + "]" + " -> Address: " + k);
-            k++;
-        }
-        
-        System.out.print("Done!\n");
-        
-        /*
-         * Device Configuration
-        **/
-        final int OUTLET_DEVICE_COUNT = Integer.valueOf(config.getConfig("outlets"));
-        final int DEVICE_COUNT = OUTLET_DEVICE_COUNT;
-        Device[] devices = new Device[DEVICE_COUNT];
-        
-        /*
-         * Build device objects
-        **/
-        System.out.print("Setting up devices...[" + DEVICE_COUNT + "]\n");
-        
-        k = 0; // Iterator for device loading algorithm
-        
-        for (int i = 0; i < OUTLET_DEVICE_COUNT; i++) {
-            devices[k] = new Outlet("outlet" + String.valueOf(i), (byte) i, false);
-            System.out.println("Outlet...[" + i + "]" + " -> Address: " + k);
-            k++;
-        }
-        
-        System.out.print("Done!\n");
-        
+
+        System.out.println("Done!");
+
         /*
          * Build and Initialize server
         **/
@@ -128,29 +115,28 @@ public class SurfboxServer {
         ServerObj server = new ServerConnection(5000);
         System.out.print("Done!\n");
         System.out.print("Server is wating for connection...");
-        
+
         if (server.setup()) {
             System.out.print("Done!\n");
         } else {
             System.out.println("Failed to set up server.");
             run = false;
         }
-        
+
         /*
          * Main Program Loop
         **/
-        
         CommandHandler cmd = new CommandHandler();
-        
-        while(run) {
-            
+
+        while (run) {
+
             data = server.listen();
-            
+
             // Handles client disconnecting events
             if (data.equals("null") || data.equals("kill")) {
                 System.out.println("Client disconnected, wating for new connection...");
                 server.kill();
-                
+
                 if (server.setup()) {
                     System.out.print("Done!\n");
                     data = "";
@@ -160,24 +146,24 @@ public class SurfboxServer {
                     run = false;
                 }
             } else {
-            
+
                 sc = new Scanner(data);
-                
+
+                String head = sc.next();
+                int index = sc.nextInt();
+
                 try {
-                    // Parse packet header
-                    String header = sc.next();
-                
-                    if (header.equals("p")) {
-                       int p = sc.nextInt();
-                       server.write(cmd.parsecmd(probes[p], sc));
-                    } else if (header.equals("d")) {
-                        int d = sc.nextInt();
-                        server.write(cmd.parsecmd(devices[d], sc));
+                    if (head.equals("p")) {
+                        server.write(cmd.parsecmd(probes.get(index), sc, index));
+                    } else if (head.equals("d")) {
+                        server.write(cmd.parsecmd(devices.get(index), sc, index));
+                    } else {
+                        System.out.println("<13> No probe or device specified");
                     }
-                } catch (Exception e) {
-                    server.write("The server does not understand your request.");
+                } catch (Exception ex) {
+                    server.write("<14> Corrupt request");
                 }
             }
-        }   
+        }
     }
 }
