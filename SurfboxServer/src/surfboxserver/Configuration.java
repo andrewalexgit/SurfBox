@@ -46,10 +46,16 @@ public class Configuration implements Configurable {
      * Root object
     **/
     Object obj;
+    
+    /*
+     * Path to API
+    **/
+    String apiPath;
 
-    public Configuration() {
+    public Configuration(String apiPath) {
         try {
-            obj = PARSER.parse(new FileReader("config/data.json"));
+            this.apiPath = apiPath;
+            obj = PARSER.parse(new FileReader(apiPath));
             configurationObject = (JSONObject) obj;
             probes = (JSONArray) configurationObject.get("probes");
             devices = (JSONArray) configurationObject.get("devices");
@@ -117,7 +123,7 @@ public class Configuration implements Configurable {
     **/
     @Override
     public void updateAPI() {
-        try (PrintWriter writer = new PrintWriter(new File("config/data.json"))) {
+        try (PrintWriter writer = new PrintWriter(new File(apiPath))) {
             writer.print("");
             writer.print(configurationObject);
         } catch (FileNotFoundException ex) {

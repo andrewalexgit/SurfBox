@@ -41,9 +41,9 @@ public class SurfboxConfigManager {
     **/
     private static JSONParser parser = new JSONParser();
 
-    public static void runConfigManager() throws FileNotFoundException, IOException, ParseException {
+    public static void runConfigManager(String apiPath) throws FileNotFoundException, IOException, ParseException {
 
-        Object obj = parser.parse(new FileReader("config/data.json"));
+        Object obj = parser.parse(new FileReader(apiPath));
         JSONObject jsonObject = (JSONObject) obj;
 
         /*
@@ -207,7 +207,7 @@ public class SurfboxConfigManager {
                  * Save and exit SBSCM3
                 **/
                 } else if (head.equals("exit")) {
-                    try (PrintWriter writer = new PrintWriter(new File("config/data.json"))) {
+                    try (PrintWriter writer = new PrintWriter(new File(apiPath))) {
                         writer.print("");
                         writer.print(jsonObject);
                     }

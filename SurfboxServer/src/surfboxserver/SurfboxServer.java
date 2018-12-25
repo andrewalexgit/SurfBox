@@ -2,8 +2,11 @@ package surfboxserver;
 
 import grab.ServerConnection;
 import grab.ServerObj;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,6 +35,20 @@ public class SurfboxServer {
          * Holds data from client
         **/
         String data = "";
+        
+        /*
+         * Grabs API File Path from properties
+        **/
+        Properties apiProps = new Properties();
+        try {
+            apiProps.load(new FileInputStream("src/api/api.properties"));
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(SurfboxServer.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(SurfboxServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        String apiPath = apiProps.getProperty("api_path");
 
         /*
          * Holds command line argument
@@ -47,7 +64,7 @@ public class SurfboxServer {
 
         if (cla.equals("config")) {
             try {
-                SurfboxConfigManager.runConfigManager();
+                SurfboxConfigManager.runConfigManager(apiPath);
             } catch (IOException | ParseException ex) {
                 Logger.getLogger(SurfboxServer.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -59,7 +76,7 @@ public class SurfboxServer {
         /*
          * Initialize probes and devices
         **/
-        Configuration config = new Configuration();
+        Configuration config = new Configuration(apiPath);
         ArrayList<ProbeObj> probes = new ArrayList<>();
         ArrayList<Device> devices = new ArrayList<>();
 
@@ -126,7 +143,7 @@ public class SurfboxServer {
         /*
          * Main Program Loop
         **/
-        CommandHandler cmd = new CommandHandler();
+        CommandHandler cmd = new CommandHandler(apiPath);
 
         while (run) {
 
@@ -149,10 +166,11 @@ public class SurfboxServer {
 
                 sc = new Scanner(data);
 
-                String head = sc.next();
-                int index = sc.nextInt();
-
                 try {
+                    
+                    String head = sc.next();
+                    int index = sc.nextInt();
+                    
                     if (head.equals("p")) {
                         server.write(cmd.parsecmd(probes.get(index), sc, index));
                     } else if (head.equals("d")) {

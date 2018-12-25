@@ -13,7 +13,11 @@ public class CommandHandler {
     /*
      * Access to API
     **/
-    Configuration config = new Configuration();
+    Configuration config;
+    
+    public CommandHandler(String apiPath) {
+        config = new Configuration(apiPath);
+    }
     
     /*
      * Parses packets recieved from the client, and returns a new packet to be served back - PROBES
