@@ -36,7 +36,7 @@ public class SurfboxServer {
         **/
         Properties apiProps = new Properties();
         try {
-            apiProps.load(new FileInputStream("/Users/andrewcampagna/NetBeansProjects/SurfboxServer/src/api/api.properties"));
+            apiProps.load(new FileInputStream("src/api/api.properties"));
         } catch (FileNotFoundException ex) {
             Logger.getLogger(SurfboxServer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
