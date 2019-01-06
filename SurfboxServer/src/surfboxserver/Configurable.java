@@ -20,6 +20,11 @@ public interface Configurable {
     public String getDeviceConfig(int index, String key);
     
     /*
+     * Get device configuration
+    **/
+    public String getSettingsConfig(String key);
+    
+    /*
      * Update probe configuration
     **/
     public void updateProbeConfiguration(int index, String key, String value);
@@ -28,6 +33,11 @@ public interface Configurable {
      * Update device configuration
     **/
     public void updateDeviceConfiguration(int index, String key, String value);
+    
+    /*
+     * Update settings object
+    **/
+    public void updateSettingsConfiguration(String key, String value);
     
     /*
      * Get probe count

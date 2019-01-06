@@ -30,18 +30,13 @@ public class SurfboxServer {
          * Main program flag
         **/
         boolean run = true;
-
-        /*
-         * Holds data from client
-        **/
-        String data = "";
         
         /*
          * Grabs API File Path from properties
         **/
         Properties apiProps = new Properties();
         try {
-            apiProps.load(new FileInputStream("src/api/api.properties"));
+            apiProps.load(new FileInputStream("/Users/andrewcampagna/NetBeansProjects/SurfboxServer/src/api/api.properties"));
         } catch (FileNotFoundException ex) {
             Logger.getLogger(SurfboxServer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -71,7 +66,7 @@ public class SurfboxServer {
         }
 
         // Main program welcome message
-        System.out.println("Surfbox 3 - Smart Aquarium Controller Software\n");
+        System.out.println("Surfbox 3 - Smart Aquarium Controller Software");
 
         /*
          * Initialize probes and devices
@@ -79,6 +74,8 @@ public class SurfboxServer {
         Configuration config = new Configuration(apiPath);
         ArrayList<ProbeObj> probes = new ArrayList<>();
         ArrayList<Device> devices = new ArrayList<>();
+        
+        System.out.println("Version " + config.getSettingsConfig("version") + "\n");
 
         System.out.println("Loading (" + config.getProbeCount() + ") probes...");
 
@@ -129,7 +126,8 @@ public class SurfboxServer {
          * Build and Initialize server
         **/
         System.out.print("Setting up server...");
-        ServerObj server = new ServerConnection(5000);
+        ServerObj server = new ServerConnection(Integer.valueOf(config.getSettingsConfig("port")));
+        System.out.println("port " + server.getPort() + "...");
         System.out.print("Done!\n");
         System.out.print("Server is wating for connection...");
 
@@ -139,6 +137,11 @@ public class SurfboxServer {
             System.out.println("Failed to set up server.");
             run = false;
         }
+        
+        /*
+         * Initialize API Listener Thread
+        **/
+        // API LISTENER
 
         /*
          * Main Program Loop
@@ -147,7 +150,7 @@ public class SurfboxServer {
 
         while (run) {
 
-            data = server.listen();
+            String data = server.listen();
 
             // Handles client disconnecting events
             if (data.equals("null") || data.equals("kill")) {
@@ -156,7 +159,6 @@ public class SurfboxServer {
 
                 if (server.setup()) {
                     System.out.print("Done!\n");
-                    data = "";
                     run = true;
                 } else {
                     System.out.println("Failed to set up server.");
@@ -169,14 +171,28 @@ public class SurfboxServer {
                 try {
                     
                     String head = sc.next();
-                    int index = sc.nextInt();
+                    int index;
                     
-                    if (head.equals("p")) {
-                        server.write(cmd.parsecmd(probes.get(index), sc, index));
-                    } else if (head.equals("d")) {
-                        server.write(cmd.parsecmd(devices.get(index), sc, index));
-                    } else {
-                        System.out.println("<13> No probe or device specified");
+                    switch (head) {
+                        case "p":
+                            index = sc.nextInt();
+                            server.write(cmd.parsecmd(probes.get(index), sc, index));
+                            break;
+                        case "d":
+                            index = sc.nextInt();
+                            server.write(cmd.parsecmd(devices.get(index), sc, index));
+                            break;   
+                        case "upd":
+                            for (int i = 0; i < devices.size(); i++) {
+                                boolean b = (config.getDeviceConfig(i, "status").equals("1"));
+                                devices.get(i).status = b;
+                                System.out.println(devices.get(i).status);
+                            }
+                            server.write("Updated devices with API");
+                            break;
+                        default:
+                            System.out.println("<13> No probe or device specified");
+                            break;
                     }
                 } catch (Exception ex) {
                     server.write("<14> Corrupt request");

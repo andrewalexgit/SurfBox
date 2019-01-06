@@ -28,7 +28,7 @@ public class CommandHandler {
         String command = sc.next();
         
         // Empty string to store new packet
-        String rtr = "";
+        String rtr;
         
         // Decides what to do with given command
         switch(command) {
@@ -75,7 +75,7 @@ public class CommandHandler {
         String command = sc.next();
         
         // Empty string to store new packet
-        String rtr = "";
+        String rtr;
         
         switch (command) {
             

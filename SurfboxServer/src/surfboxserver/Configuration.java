@@ -31,6 +31,11 @@ public class Configuration implements Configurable {
      * Holds device configuration settings
     **/
     JSONArray devices;
+    
+    /*
+     * Main server settings
+    **/
+    JSONObject settings;
 
     /*
      *  JSON Parser Object
@@ -59,6 +64,7 @@ public class Configuration implements Configurable {
             configurationObject = (JSONObject) obj;
             probes = (JSONArray) configurationObject.get("probes");
             devices = (JSONArray) configurationObject.get("devices");
+            settings = (JSONObject) configurationObject.get("settings");
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException | ParseException ex) {
@@ -83,6 +89,14 @@ public class Configuration implements Configurable {
         JSONObject device = (JSONObject) devices.get(index);
         return (String) device.get(key);
     }
+    
+    /*
+     * Get device configuration
+    **/
+    @Override
+    public String getSettingsConfig(String key) {
+        return (String) settings.get(key);
+    }
 
     /*
      * Update probe configuration
@@ -100,6 +114,14 @@ public class Configuration implements Configurable {
     public void updateDeviceConfiguration(int index, String key, String value) {
         JSONObject device = (JSONObject) devices.get(index);
         device.put(key, value);
+    }
+    
+    /*
+     * Update settings object
+    **/
+    @Override
+    public void updateSettingsConfiguration(String key, String value) {
+        settings.put(key, value);
     }
     
     /*
