@@ -46,6 +46,16 @@ public class CommandHandler {
                 }
             break;
             
+            // Dump history into logger object
+            case "dump":
+                probe.history.keySet().forEach((key) -> {
+                    System.out.println("DUMP FROM " + probe + " -> " + key + ": " + String.valueOf(probe.getReading(key)));
+                    config.updateLogger(key, String.valueOf(probe.getReading(key)), probe.type);
+                });
+                config.updateAPI();
+                rtr = "Dumped " + probe + " history into logger object";
+            break;
+            
             // Gets last reading stored in memory
             case "getr":
                 rtr = String.valueOf(probe.getReading());

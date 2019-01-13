@@ -54,7 +54,12 @@ public class SurfboxConfigManager {
          *  Array of device objects
         **/
         JSONArray devices = (JSONArray) jsonObject.get("devices");
-        
+
+        /*
+         *  Array of timer objects
+        **/
+        JSONArray timers = (JSONArray) jsonObject.get("timers");
+
         /*
          * Settings object
         **/
@@ -67,17 +72,55 @@ public class SurfboxConfigManager {
 
             System.out.print("$ > ");
             String input = KEYBOARD.nextLine();
+            String command;
 
             try {
                 sc = new Scanner(input);
                 String head = sc.next();
 
-                /*
-                 * Probe manager chunk
-                 **/
                 switch (head) {
+
+                    /*
+                         * Handle timers
+                        **/
+                    case "t":
+
+                        command = sc.next();
+                        
+                           switch (command) {
+                            /*
+                     * Remove timer by address
+                     **/
+                            case "add":
+                                JSONObject newTimer = new JSONObject();
+                                newTimer.put("ontime", "12.00.00");
+                                newTimer.put("offtime", "12.00.01");
+                                newTimer.put("deviceaddr", "0");
+                                timers.add(newTimer);
+                                break;
+                            case "remove":
+                                timers.remove(sc.nextInt());
+                                break;
+                            default:
+                                JSONObject timer = (JSONObject) timers.get(sc.nextInt());
+                                /*
+                            * Get timer by address
+                            **/
+                                if (command.equals("get")) {
+                                    System.out.println((String) "ontime: "+ timer.get("ontime"));
+                                    System.out.println((String) "offtime: "+ timer.get("offtime"));
+                                    System.out.println((String) "deviceaddr: "+ timer.get("deviceaddr"));
+                                } /*
+                            * Update timer by (key, value)
+                            **/ else if (command.equals("update")) {
+                                    timer.put(sc.next(), sc.next());
+                                }
+                                break;
+                        }
+                        break;
+
                     case "p": {
-                        String command = sc.next();
+                        command = sc.next();
                         /*
                      * Add new blank probe
                      **/
@@ -92,6 +135,7 @@ public class SurfboxConfigManager {
                                 newProbe.put("target", "00.0");
                                 probes.add(newProbe);
                                 break;
+                        
                             case "remove":
                                 probes.remove(sc.nextInt());
                                 break;
@@ -116,7 +160,7 @@ public class SurfboxConfigManager {
                         break;
                     }
                     case "d": {
-                        String command = sc.next();
+                        command = sc.next();
                         /*
                      * Add new blank device
                      **/
@@ -183,9 +227,25 @@ public class SurfboxConfigManager {
                             i++;
                         }
 
-                        /*
+                        i = 0;
+                        System.out.print("\nTIMERS\n");
+                        for (Object o : timers) {
+
+                            JSONObject timer = (JSONObject) o;
+
+                            System.out.println("[ Timer-" + i + " ]");
+                            System.out.println("ontime: " + (String) timer.get("ontime"));
+                            System.out.println("offtime: " + (String) timer.get("offtime"));
+                            System.out.println("deviceaddr: " + (String) timer.get("deviceaddr"));
+                            System.out.println();
+                            i++;
+                        }
+
+                        break;
+
+                    /*
                         * Save and exit SBSCM3
-                        **/ break;
+                        **/
                     case "exit":
                         try (PrintWriter writer = new PrintWriter(new File(apiPath))) {
                             writer.print("");
@@ -195,11 +255,11 @@ public class SurfboxConfigManager {
                         break;
 
                     case "port":
-                            settings.put("port", sc.next());
+                        settings.put("port", sc.next());
                         break;
-                        
+
                     case "getport":
-                            System.out.println((String) settings.get("port"));
+                        System.out.println((String) settings.get("port"));
                         break;
                     default:
                         break;

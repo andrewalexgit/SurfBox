@@ -46,12 +46,7 @@ public abstract class ProbeObj {
     /*
      * Hash-table for readings and corrosponding times
     **/
-    HashMap<String, Float> history = new HashMap<String, Float>();
-    
-    /*
-     * Array of date keys for accessing history hash table
-    **/
-    ArrayList<String> keys = new ArrayList<>();
+    HashMap<String, Float> history = new HashMap<>();
     
     protected ProbeObj(String name, float min, float max, float target, float tolerance) {
         this.type = name;
@@ -73,14 +68,14 @@ public abstract class ProbeObj {
      * Checks if reading is high out of range
     **/
     public boolean isHigh() {
-        return (reading > max) ? true : false;
+        return (reading > max);
     }
     
     /*
      * Checks if reading is low out of range
     **/
     public boolean isLow() {
-        return (reading < min) ? true : false;
+        return (reading < min);
     }
     
     /*
@@ -119,6 +114,7 @@ public abstract class ProbeObj {
     **/
     public void newReading(float reading) {
         setReading(reading);
+        history.put(getDateTime(), reading);
     }
     
     /*
@@ -132,7 +128,7 @@ public abstract class ProbeObj {
      * Compare probe types
     **/
     public boolean equalsType(String otherType) {
-        return (type.equals(otherType)) ? true : false;
+        return (type.equals(otherType));
     }
     
     /*

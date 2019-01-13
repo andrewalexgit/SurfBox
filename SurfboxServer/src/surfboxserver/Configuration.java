@@ -33,6 +33,16 @@ public class Configuration implements Configurable {
     JSONArray devices;
     
     /*
+     * Holds timer configuration settings
+    **/
+    JSONArray timers;
+    
+    /*
+     * Logger data
+    **/
+    JSONArray logger;
+    
+    /*
      * Main server settings
     **/
     JSONObject settings;
@@ -64,6 +74,8 @@ public class Configuration implements Configurable {
             configurationObject = (JSONObject) obj;
             probes = (JSONArray) configurationObject.get("probes");
             devices = (JSONArray) configurationObject.get("devices");
+            timers = (JSONArray) configurationObject.get("timers");
+            logger = (JSONArray) configurationObject.get("logger");
             settings = (JSONObject) configurationObject.get("settings");
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, ex);
@@ -91,11 +103,39 @@ public class Configuration implements Configurable {
     }
     
     /*
+     * Get timer configuration
+    **/
+    @Override
+    public String getTimerConfig(int index, String key) {
+        JSONObject timer = (JSONObject) timers.get(index);
+        return (String) timer.get(key);
+    }
+    
+    /*
      * Get device configuration
     **/
     @Override
     public String getSettingsConfig(String key) {
         return (String) settings.get(key);
+    }
+    
+    /*
+     * New logger entry
+    **/
+    @Override
+    public void updateLogger(String key, String value, String name) {
+        JSONObject log = new JSONObject();
+        log.put("name", name);
+        log.put(key, value);
+        logger.add(log);
+    }
+    
+    /*
+     * Clear logger for new program run
+    **/
+    public void clearLogger() {
+        logger.clear();
+        updateAPI();
     }
 
     /*
@@ -114,6 +154,15 @@ public class Configuration implements Configurable {
     public void updateDeviceConfiguration(int index, String key, String value) {
         JSONObject device = (JSONObject) devices.get(index);
         device.put(key, value);
+    }
+    
+    /*
+     * Update timer configuration
+    **/
+    @Override
+    public void updateTimerConfiguration(int index, String key, String value) {
+        JSONObject timer = (JSONObject) timers.get(index);
+        timer.put(key, value);
     }
     
     /*
@@ -138,6 +187,14 @@ public class Configuration implements Configurable {
     @Override
     public int getDeviceCount() {
         return devices.size();
+    }
+    
+    /*
+     * Get timer count
+    **/
+    @Override
+    public int getTimerCount() {
+        return timers.size();
     }
 
     /*

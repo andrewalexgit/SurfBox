@@ -57,7 +57,7 @@ public class SurfboxServer {
             cla += arg;
         }
 
-        if (cla.equals("config")) {
+        if (cla.equals("")) {
             try {
                 SurfboxConfigManager.runConfigManager(apiPath);
             } catch (IOException | ParseException ex) {
@@ -74,6 +74,7 @@ public class SurfboxServer {
         Configuration config = new Configuration(apiPath);
         ArrayList<ProbeObj> probes = new ArrayList<>();
         ArrayList<Device> devices = new ArrayList<>();
+        ArrayList<Timer> timers = new ArrayList<>();
         
         System.out.println("Version " + config.getSettingsConfig("version") + "\n");
 
@@ -121,6 +122,35 @@ public class SurfboxServer {
         }
 
         System.out.println("Done!");
+        
+        /*
+         * Build and initialize timer threads
+        **/
+        System.out.println("Initializing timer threads...");
+        
+        // Loads array of timers from configuration
+        for (int i = 0; i < config.getTimerCount(); i++) {
+            
+            int deviceAddr = Integer.valueOf(config.getTimerConfig(i, "deviceaddr"));
+            
+            System.out.println("Timer thread created for " + config.getDeviceConfig(deviceAddr, "name"));
+            
+            timers.add(new Timer(config.getTimerConfig(i, "ontime"), 
+                       config.getTimerConfig(i, "offtime"), 
+                       config, deviceAddr,
+                       devices.get(deviceAddr)));
+        }
+        
+        // Begins each timer thread
+        timers.forEach((t) -> { t.start(); });
+        System.out.println("Done!");
+        
+        /*
+         * Clear logger for new session
+        **/
+        System.out.println("Creating new session for logger...");
+        config.clearLogger();
+        System.out.println("Done!");
 
         /*
          * Build and Initialize server
@@ -137,11 +167,6 @@ public class SurfboxServer {
             System.out.println("Failed to set up server.");
             run = false;
         }
-        
-        /*
-         * Initialize API Listener Thread
-        **/
-        // API LISTENER
 
         /*
          * Main Program Loop

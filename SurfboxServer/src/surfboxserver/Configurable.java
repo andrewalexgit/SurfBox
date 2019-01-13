@@ -20,6 +20,11 @@ public interface Configurable {
     public String getDeviceConfig(int index, String key);
     
     /*
+     * Get timer configuration
+    **/
+    public String getTimerConfig(int index, String key);
+    
+    /*
      * Get device configuration
     **/
     public String getSettingsConfig(String key);
@@ -35,9 +40,19 @@ public interface Configurable {
     public void updateDeviceConfiguration(int index, String key, String value);
     
     /*
+     * Update timer configuration
+    **/
+    public void updateTimerConfiguration(int index, String key, String value);
+    
+    /*
      * Update settings object
     **/
     public void updateSettingsConfiguration(String key, String value);
+    
+    /*
+     * New logger entry
+    **/
+    public void updateLogger(String key, String value, String name);
     
     /*
      * Get probe count
@@ -48,6 +63,11 @@ public interface Configurable {
      * Get device count
     **/
     public int getDeviceCount();
+    
+    /*
+     * Get timer count
+    **/
+    public int getTimerCount();
     
     /*
      * Print new JSON API
