@@ -144,13 +144,6 @@ public class SurfboxServer {
         // Begins each timer thread
         timers.forEach((t) -> { t.start(); });
         System.out.println("Done!");
-        
-        /*
-         * Clear logger for new session
-        **/
-        System.out.println("Creating new session for logger...");
-        config.clearLogger();
-        System.out.println("Done!");
 
         /*
          * Build and Initialize server
