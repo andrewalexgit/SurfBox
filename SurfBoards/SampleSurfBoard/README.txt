@@ -1,6 +1,11 @@
 
 This SurfBoard is a simple Temperature / pH Logger
 
+Connect the (Po) pin on pH to GPIO36 (ADC 0)
+Connect the (Data) pin on the Temperature sensor to GPIO15 (ADC 13) 
+
+*If you are just using the DS18B20 sensor without breakout board be sure to apply a 4.7k pull-up resistor on the data pin*
+
 - pH: https://www.ebay.com/itm/Liquid-PH0-14-Value-Detect-Sensor-Module-PH-Electrode-Probe-BNC-for-Arduino/172462790633?hash=item28279557e9Ⓜ️mE135rqkUfZ3p6b_hgK9yew:rk:3:pf:1&frcectupt=true
 
 - Temperature: https://www.ebay.com/itm/100cm-Waterproof-DS18B20-Temperature-Sensor-DS18B20-Adapter-Module-for-Arduino/382558687469?epid=19019662462&hash=item59124650ed:g:ZJwAAOSwvN9bkYHg:rk:1:pf:1&frcectupt=true
