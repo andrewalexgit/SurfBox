@@ -57,7 +57,7 @@ public class SurfboxServer {
             cla += arg;
         }
 
-        if (cla.equals("")) {
+        if (cla.equals("config")) {
             try {
                 SurfboxConfigManager.runConfigManager(apiPath);
             } catch (IOException | ParseException ex) {
