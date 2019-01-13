@@ -14,24 +14,14 @@ Smart Aquarium Controller Software
 What is SurfBox?
 SurfBox is a simple platform for monitoring parameters, controlling devices, and supports remote WiFi automation.
 
-What can I find in the repository here?
-The entire device is comprised of several moving parts such as microcontrollers and circuitry and of course and an internet
-capable client. What you will find here is the backend server platform to support the 
-SurfBox project. 
+Features
 
-Goals of SurfBox:
-
-  (1) Create a backend multiplatform server that is open source.
-    - Allows engineers to create extensions and customize commands to allow for maximum personalization.
-    
-  (2) Support the main communication from client to server through the Grab2 library (See Grab repository for library).
-    - Grab2 in short will allow for multiplatform client support, in short you could use PIC, Arduino, Raspberry Pi, etc.
-    
-  (3) Mutli-Client support.
-    - Support for multiple clients connected to a single server with the ability to set parameters and control each client
-    individually. This will prove to be one of the most challenging to support features of the software.
-    
-  (4) Memory.
-    - Support for either a basic file system or sophisticated MySQL database systems for memory of readings and other data.
-
-
+- Live JSON API streaming data
+- Memory dump feature for logging over long periods of time
+- Timer objects like dosping pumps and power-head control
+- Parameter monitoring for pH, EC, and Temperature
+- Regular device outlet control
+- Multi-platform support
+- Runs excellent on raspberry-pi
+- Command line interface
+- Adjustable TCP options
