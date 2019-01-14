@@ -144,6 +144,11 @@ public class SurfboxServer {
         // Begins each timer thread
         timers.forEach((t) -> { t.start(); });
         System.out.println("Done!");
+        
+        // Creating new logger session
+        System.out.println("Creating new logger session...");
+        config.clearLogger();
+        System.out.println("Done!");
 
         /*
          * Build and Initialize server
@@ -171,7 +176,7 @@ public class SurfboxServer {
             String data = server.listen();
 
             // Handles client disconnecting events
-            if (data.equals("null") || data.equals("kill")) {
+            if (data.equals("null") || data.equals("kill") || data.contains("<2>")) {
                 System.out.println("Client disconnected, wating for new connection...");
                 server.kill();
 
