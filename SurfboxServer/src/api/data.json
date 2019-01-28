@@ -1,1 +1,1 @@
-{"settings":{"port":"4999","version":"3.7.0"},"logger":[],"devices":[{"relay":"1","name":"heater","type":"outlet","status":"1"}],"probes":[{"tol":"1","min":"72","max":"82","name":"main","type":"temp","target":"80"}]}
+{"settings":{"port":"4999","version":"3.7.4"},"pulsers":[{"deviceaddr":"0","pulsewidth":"5000"}],"timers":[],"devices":[{"relay":"0","name":"powerhead","type":"outlet","status":"0"}],"logger":[],"probes":[]}
