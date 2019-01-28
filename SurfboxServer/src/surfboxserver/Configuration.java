@@ -38,6 +38,16 @@ public class Configuration implements Configurable {
     JSONArray timers;
     
     /*
+     * Holds timer configuration settings
+    **/
+    JSONArray pulsers;
+    
+    /*
+     * Holds timer configuration settings
+    **/
+    JSONArray dosingpumps;
+    
+    /*
      * Logger data
     **/
     JSONArray logger;
@@ -75,6 +85,8 @@ public class Configuration implements Configurable {
             probes = (JSONArray) configurationObject.get("probes");
             devices = (JSONArray) configurationObject.get("devices");
             timers = (JSONArray) configurationObject.get("timers");
+            pulsers = (JSONArray) configurationObject.get("pulsers");
+            dosingpumps = (JSONArray) configurationObject.get("dosingpumps");
             logger = (JSONArray) configurationObject.get("logger");
             settings = (JSONObject) configurationObject.get("settings");
         } catch (FileNotFoundException ex) {
@@ -112,6 +124,24 @@ public class Configuration implements Configurable {
     }
     
     /*
+     * Get pulser configuration
+    **/
+    @Override
+    public String getPulserConfig(int index, String key) {
+        JSONObject pulser = (JSONObject) pulsers.get(index);
+        return (String) pulser.get(key);
+    }
+    
+    /*
+     * Get dosing pump configuration
+    **/
+    @Override
+    public String getDosingpumpsConfig(int index, String key) {
+        JSONObject dosingpump = (JSONObject) dosingpumps.get(index);
+        return (String) dosingpump.get(key);
+    }
+    
+    /*
      * Get device configuration
     **/
     @Override
@@ -126,7 +156,8 @@ public class Configuration implements Configurable {
     public void updateLogger(String key, String value, String name) {
         JSONObject log = new JSONObject();
         log.put("name", name);
-        log.put(key, value);
+        log.put("time", key);
+        log.put("reading", value);
         logger.add(log);
     }
     
@@ -166,6 +197,24 @@ public class Configuration implements Configurable {
     }
     
     /*
+     * Update pulser configuration
+    **/
+    @Override
+    public void updatePulserConfiguration(int index, String key, String value) {
+        JSONObject pulse = (JSONObject) pulsers.get(index);
+        pulse.put(key, value);
+    }
+    
+    /*
+     * Update dosing pump configuration
+    **/
+    @Override
+    public void updateDosingpumpsConfiguration(int index, String key, String value) {
+        JSONObject dosingpump = (JSONObject) dosingpumps.get(index);
+        dosingpump.put(key, value);
+    }
+    
+    /*
      * Update settings object
     **/
     @Override
@@ -195,6 +244,22 @@ public class Configuration implements Configurable {
     @Override
     public int getTimerCount() {
         return timers.size();
+    }
+    
+    /*
+     * Get pulser count
+    **/
+    @Override
+    public int getPulserCount() {
+        return pulsers.size();
+    }
+    
+    /*
+     * Get dosing pump count
+    **/
+    @Override
+    public int getDosingpumpsCount() {
+        return dosingpumps.size();
     }
 
     /*

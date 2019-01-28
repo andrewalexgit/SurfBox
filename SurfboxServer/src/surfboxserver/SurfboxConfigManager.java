@@ -59,6 +59,11 @@ public class SurfboxConfigManager {
          *  Array of timer objects
         **/
         JSONArray timers = (JSONArray) jsonObject.get("timers");
+        
+        /*
+         *  Array of pulser objects
+        **/
+        JSONArray pulsers = (JSONArray) jsonObject.get("pulsers");
 
         /*
          * Settings object
@@ -83,7 +88,7 @@ public class SurfboxConfigManager {
                     /*
                          * Handle timers
                         **/
-                    case "t":
+                    case "timer":
 
                         command = sc.next();
                         
@@ -114,6 +119,40 @@ public class SurfboxConfigManager {
                             * Update timer by (key, value)
                             **/ else if (command.equals("update")) {
                                     timer.put(sc.next(), sc.next());
+                                }
+                                break;
+                        }
+                        break;
+                        
+                        case "pulse":
+
+                        command = sc.next();
+                        
+                           switch (command) {
+                            /*
+                     * Remove timer by address
+                     **/
+                            case "add":
+                                JSONObject newPulse = new JSONObject();
+                                newPulse.put("pulsewidth", "100000");
+                                newPulse.put("deviceaddr", "0");
+                                pulsers.add(newPulse);
+                                break;
+                            case "remove":
+                                pulsers.remove(sc.nextInt());
+                                break;
+                            default:
+                                JSONObject pulse = (JSONObject) pulsers.get(sc.nextInt());
+                                /*
+                            * Get timer by address
+                            **/
+                                if (command.equals("get")) {
+                                    System.out.println((String) "pulse width (miliseconds): "+ pulse.get("pulsewidth"));
+                                    System.out.println((String) "deviceaddr: "+ pulse.get("deviceaddr"));
+                                } /*
+                            * Update timer by (key, value)
+                            **/ else if (command.equals("update")) {
+                                    pulse.put(sc.next(), sc.next());
                                 }
                                 break;
                         }
@@ -237,6 +276,19 @@ public class SurfboxConfigManager {
                             System.out.println("ontime: " + (String) timer.get("ontime"));
                             System.out.println("offtime: " + (String) timer.get("offtime"));
                             System.out.println("deviceaddr: " + (String) timer.get("deviceaddr"));
+                            System.out.println();
+                            i++;
+                        }
+                        
+                        i = 0;
+                        System.out.print("\nPULSERS\n");
+                        for (Object o : pulsers) {
+
+                            JSONObject pulse = (JSONObject) o;
+
+                            System.out.println("[ Pulse-" + i + " ]");
+                            System.out.println("pulse width (miliseconds): " + (String) pulse.get("pulsewidth"));
+                            System.out.println("deviceaddr: " + (String) pulse.get("deviceaddr"));
                             System.out.println();
                             i++;
                         }

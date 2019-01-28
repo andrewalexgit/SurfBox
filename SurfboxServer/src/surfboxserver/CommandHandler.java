@@ -48,13 +48,19 @@ public class CommandHandler {
             
             // Dump history into logger object
             case "dump":
-                config.clearLogger();
                 probe.history.keySet().forEach((key) -> {
                     System.out.println("DUMP FROM " + probe + " -> " + key + ": " + String.valueOf(probe.getReading(key)));
                     config.updateLogger(key, String.valueOf(probe.getReading(key)), probe.type);
                 });
+                probe.history.clear();
                 config.updateAPI();
                 rtr = "Dumped " + probe + " history into logger object";
+            break;
+            
+            // Clears historical dump data
+            case "clearhist":
+                config.clearLogger();
+                rtr = "cleared historical data for " + probe;
             break;
             
             // Gets last reading stored in memory

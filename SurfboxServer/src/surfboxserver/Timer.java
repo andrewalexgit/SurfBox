@@ -7,26 +7,10 @@ import java.text.SimpleDateFormat;
 *
 *	Developed by, Andrew C.
 **/
-public class Timer implements Runnable {
+public class Timer extends TimerObj implements Runnable {
 
     // Static id of timer
     private static int id = 0;
-    
-    /*
-     * Holds the device object to be affected by timer
-    **/
-    int deviceAddr;
-    
-    /*
-     * Access to API Configuration manager
-    **/
-    Configuration config;
-    
-    /*
-     * Access to the device object
-    **/
-    Device device;
-
     /*
      * Timestamp Format
     **/
@@ -46,18 +30,11 @@ public class Timer implements Runnable {
      * Timer thread
     **/
     private Thread thread;
-    
-    /*
-     * Timer status
-    **/
-    boolean fired = false;
 
     public Timer(String onTime, String offTime, Configuration config, int deviceAddr, Device device) {
+        super(config, deviceAddr, device);
         this.onTime = onTime;
         this.offTime = offTime;
-        this.deviceAddr = deviceAddr;
-        this.config = config;
-        this.device = device;
         id++;
     }
 
@@ -90,6 +67,7 @@ public class Timer implements Runnable {
     }
 
     // THREAD //
+    @Override
     public void start() {
         if (thread == null) {
             thread = new Thread(this, "timer" + id);

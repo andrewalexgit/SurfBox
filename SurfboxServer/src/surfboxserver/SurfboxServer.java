@@ -57,7 +57,7 @@ public class SurfboxServer {
             cla += arg;
         }
 
-        if (cla.equals("config")) {
+        if (cla.equals("")) {
             try {
                 SurfboxConfigManager.runConfigManager(apiPath);
             } catch (IOException | ParseException ex) {
@@ -74,7 +74,7 @@ public class SurfboxServer {
         Configuration config = new Configuration(apiPath);
         ArrayList<ProbeObj> probes = new ArrayList<>();
         ArrayList<Device> devices = new ArrayList<>();
-        ArrayList<Timer> timers = new ArrayList<>();
+        ArrayList<TimerObj> timers = new ArrayList<>();
         
         System.out.println("Version " + config.getSettingsConfig("version") + "\n");
 
@@ -102,7 +102,6 @@ public class SurfboxServer {
 
         }
 
-        System.out.println("Done!");
         System.out.println("Loading (" + config.getDeviceCount() + ") devices...");
 
         // Load Device objects - Change to switch statement when new device objects are created
@@ -120,8 +119,6 @@ public class SurfboxServer {
             }
 
         }
-
-        System.out.println("Done!");
         
         /*
          * Build and initialize timer threads
@@ -141,12 +138,28 @@ public class SurfboxServer {
                        devices.get(deviceAddr)));
         }
         
+        // Loads array of pulsers from configuration
+        for (int i = 0; i < config.getPulserCount(); i++) {
+            
+            int deviceAddr = Integer.valueOf(config.getPulserConfig(i, "deviceaddr"));
+            
+            System.out.println("Pulse thread created for " + config.getDeviceConfig(deviceAddr, "name"));
+            
+            timers.add(new Pulse(Integer.valueOf(config.getPulserConfig(i, "pulsewidth")), 
+                       config, deviceAddr,
+                       devices.get(deviceAddr)));
+        }
+        
+        //// Loads array of dosing pumps from configuration
+        //for (int i = 0; i < config.getDosingpumpsCount(); i++) {
+            
+        //}
+        
         // Begins each timer thread
         timers.forEach((t) -> { t.start(); });
-        System.out.println("Done!");
         
         // Creating new logger session
-        System.out.println("Creating new logger session...");
+        System.out.print("Creating new logger session...");
         config.clearLogger();
         System.out.println("Done!");
 
@@ -156,8 +169,7 @@ public class SurfboxServer {
         System.out.print("Setting up server...");
         ServerObj server = new ServerConnection(Integer.valueOf(config.getSettingsConfig("port")));
         System.out.println("port " + server.getPort() + "...");
-        System.out.print("Done!\n");
-        System.out.print("Server is wating for connection...");
+        System.out.println("Server is wating for connection...");
 
         if (server.setup()) {
             System.out.print("Done!\n");

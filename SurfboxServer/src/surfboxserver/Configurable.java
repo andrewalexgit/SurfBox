@@ -25,6 +25,16 @@ public interface Configurable {
     public String getTimerConfig(int index, String key);
     
     /*
+     * Get pulser configuration
+    **/
+    public String getPulserConfig(int index, String key);
+    
+    /*
+     * Get dosing pump configuration
+    **/
+    public String getDosingpumpsConfig(int index, String key);
+    
+    /*
      * Get device configuration
     **/
     public String getSettingsConfig(String key);
@@ -43,6 +53,16 @@ public interface Configurable {
      * Update timer configuration
     **/
     public void updateTimerConfiguration(int index, String key, String value);
+    
+    /*
+     * Update pulser configuration
+    **/
+    public void updatePulserConfiguration(int index, String key, String value);
+    
+    /*
+     * Update dosing pump configuration
+    **/
+    public void updateDosingpumpsConfiguration(int index, String key, String value);
     
     /*
      * Update settings object
@@ -68,6 +88,16 @@ public interface Configurable {
      * Get timer count
     **/
     public int getTimerCount();
+    
+    /*
+     * Get pulser count
+    **/
+    public int getPulserCount();
+    
+    /*
+     * Get dosing pump count
+    **/
+    public int getDosingpumpsCount();
     
     /*
      * Print new JSON API
