@@ -13,3 +13,8 @@ Sandbox platform that makes DIY aquarium controller projects easy for makers by 
 - Ability to create and share your own custom web-UI.
 - Webserver built into application. (no need for apache anymore)
 - Ability to be used with any DIY device such as Arduino, Raspberry-Pi, PIC, etc. (Though the pi is recommended)
+
+### Getting started
+
+You can download the repo here, or just the necessary files from the official website
+>http://surfboxserver.us/downloads
