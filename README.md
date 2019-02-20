@@ -6,5 +6,10 @@ Sandbox platform that makes DIY aquarium controller projects easy for makers by 
 
 ### Features
 
-*1. g
-*2. g
+- Full support for Timers, Pulsers, Multiple types of probes, and regular device outlet relay control.
+- Easily add, remove, and edit devices, timers, and probes through config manager.
+- Very simple web-UI with custom social media and profile options.
+- Access to live-streaming data through JSON API.
+- Ability to create and share your own custom web-UI.
+- Webserver built into application. (no need for apache anymore)
+- Ability to be used with any DIY device such as Arduino, Raspberry-Pi, PIC, etc. (Though the pi is recommended)
