@@ -16,5 +16,6 @@ Sandbox platform that makes DIY aquarium controller projects easy for makers by 
 
 ### Getting started
 
-You can download the repo here, or just the necessary files from the official website
->http://surfboxserver.us/downloads
+You can download the repo here, or just the necessary files from the official website.
+
+http://surfboxserver.us/downloads
