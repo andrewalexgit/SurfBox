@@ -1,27 +1,9 @@
-# SurfBox
-Smart Aquarium Controller Software
+#   _____            ________            
+#  / ___/__  _______/ __/ __ )____  _  __
+#  \__ \/ / / / ___/ /_/ __  / __ \| |/_/
+# ___/ / /_/ / /  / __/ /_/ / /_/ />  <  
+#/____/\__,_/_/  /_/ /_____/\____/_/|_|  
+
+Sandbox software platform that makes DIY aquarium controller projects easier for makers by taking care of the back-end for you!
 
 
-   _____            ________            
-  / ___/__  _______/ __/ __ )____  _  __
-  \__ \/ / / / ___/ /_/ __  / __ \| |/_/
- ___/ / /_/ / /  / __/ /_/ / /_/ />  <  
-/____/\__,_/_/  /_/ /_____/\____/_/|_|  
-                                       
-                                           
-- Smart aquarium technology platform
-
-What is SurfBox?
-SurfBox is a simple platform for monitoring parameters, controlling devices, and supports remote WiFi automation.
-
-Features
-
-- Live JSON API streaming data
-- Memory dump feature for logging over long periods of time
-- Timer objects like dosping pumps and power-head control
-- Parameter monitoring for pH, EC, and Temperature
-- Regular device outlet control
-- Multi-platform support
-- Runs excellent on raspberry-pi
-- Command line interface
-- Adjustable TCP options
