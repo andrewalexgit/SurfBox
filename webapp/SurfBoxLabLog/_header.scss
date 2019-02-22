@@ -1,0 +1,19 @@
+.header {
+  background-color: $title-bg-color;
+
+  h2 {
+    margin: 0;
+    padding: 10px;
+    color: $title-color;
+    font-family: $logo-title-font;
+    display: inline-block;
+  }
+
+  h4 {
+    margin: 0;
+    padding: 10px;
+    color: $label-color;
+    font-family: $global-font;
+    display: inline-block;
+  }
+}

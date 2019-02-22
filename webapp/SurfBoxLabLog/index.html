@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SurfBox - HOME</title>
+    <link rel="stylesheet" type="text/css" href="main.css"></link>
+    <script src="js/lib/jquery3.3.1.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/livenews.js"></script>
+    <script src="js/userdata.js"></script>
+</head>
+<body onload="mainAnimations()">
+
+    <nav id="navBar">
+        <ul>
+            <li><a href="#" class="active"><img src="img/icons/Home.png" alt="Home">&nbsp&nbspHome</a></li>
+            <li><a href="configure.html"><img src="img/icons/Tools.png" alt="Configuration">&nbsp&nbspConfiguration</a></li>
+            <li><a href="#"><img src="img/icons/Stats.png" alt="Lab Log">&nbsp&nbspLab Log</a></li>
+            <li><a href="#"><img src="img/icons/Support.png" alt="Set-up Guide">&nbsp&nbspSet-up Guide</a></li>
+            <li style="float: right;"><input type="image" src="https://www.reef2reef.com/styles/reefforum/xenforo/logo-narrow.png" href="http://reef2reef.com/" width="90" height="35"></li>
+        </ul>
+    </nav>
+
+    <div class="header">
+        <h2 id="txtTitle">SurfBox</h2>
+        <h4 id="txtUsername">...</h4>
+        <div class="navButtonContainer" onclick="navBarToggle(this)">
+            <div class="bar1"></div>
+            <div class="bar2"></div>
+            <div class="bar3"></div>
+        </div>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <p id="txtProfile" style="text-align: center;">...</p>
+    <br>
+
+    <div class="avatar"></div>
+
+    <div id="widgets">
+        <center>
+            <div class="widgetContainer">
+                <h3>pH</h3>
+                <p>8.2</p>
+            </div>
+            <div class="widgetContainer">
+                <h3>Temp</h3>
+                <p>80.1</p>
+            </div>
+            <div class="widgetContainer">
+                <h3>Salinity</h3>
+                <p>35.2</p>
+            </div>
+            <div class="widgetContainer">
+                <h3>Water level</h3>
+                <p>Good</p>
+            </div>
+        </center>
+    </div>
+
+    <br>
+
+    <div class="footer">
+        <p>(C) SurfBox Aquarium Solutions, 2019 - <a href="toc.html">terms and conditions</a></p>
+    </div>
+</body>
+</html>

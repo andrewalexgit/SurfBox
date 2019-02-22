@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SurfBox - CONFIGURE</title>
+    <link rel="stylesheet" type="text/css" href="main.css"></link>
+    <script src="js/lib/jquery3.3.1.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/livenews.js"></script>
+    <script src="js/settingdata.js"></script>
+</head>
+<body onload="mainAnimations()">
+
+<nav id="navBar">
+    <ul>
+        <li><a href="index.html"><img src="img/icons/Home.png" alt="Home">&nbsp&nbspHome</a></li>
+        <li><a href="#" class="active"><img src="img/icons/Tools.png" alt="Configuration">&nbsp&nbspConfiguration</a></li>
+        <li><a href="#"><img src="img/icons/Stats.png" alt="Lab Log">&nbsp&nbspLab Log</a></li>
+        <li><a href="#"><img src="img/icons/Support.png" alt="Set-up Guide">&nbsp&nbspSet-up Guide</a></li>
+        <li style="float: right;"><input type="image" src="https://www.reef2reef.com/styles/reefforum/xenforo/logo-narrow.png" href="http://reef2reef.com/" width="90" height="35"></li>
+    </ul>
+</nav>
+
+<div class="header">
+    <h2 id="txtTitle">SurfBox</h2>
+    <h4 style="text-align: center" id="txtPort"></h4>
+    <a href="#" onclick="alert('change');" class="configLink">Change</a>
+    <div class="navButtonContainer" onclick="navBarToggle(this)">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+    </div>
+</div>
+
+<br>
+<br>
+<br>
+
+<center>
+    <div class="configBlock">
+        <h2>Probes and Sensors</h2>
+        <table id="probeConfig" cellspacing="0" cellpadding="0">
+            <th style="border-top-left-radius: 25%;">Type</th>
+            <th>Name</th>
+            <th style="border-top-right-radius: 25%;">Address</th>
+            <tr>
+                <td>Temperature</td>
+                <td>SumpTemp</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>Temperature</td>
+                <td>MainTemp</td>
+                <td>1</td>
+            </tr>
+        </table>
+    </div>
+</center>
+
+<div class="footer">
+    <p>(C) SurfBox Aquarium Solutions, 2019 - <a href="toc.html">terms and conditions</a></p>
+</div>
+</body>
+</html>

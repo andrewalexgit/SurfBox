@@ -1,0 +1,23 @@
+@font-face {
+  font-family: 'logoFont';
+  src: url('fonts/barcade.ttf');
+}
+
+$bg-color: #222831;
+$title-bg-color: #393e46;
+$hover-color: #00adb5;
+$label-color: #eeeeee;
+$title-color: #00adb5;
+$global-font: Arial;
+$logo-title-font: logoFont;
+
+@import 'footer';
+@import 'navigation';
+@import 'header';
+@import 'content';
+
+html, body {
+  background-color: $bg-color;
+  margin: 0;
+  padding: 0;
+}

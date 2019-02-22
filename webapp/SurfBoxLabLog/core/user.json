@@ -1,0 +1,26 @@
+{
+  "userInfo":{
+    "name":"Andrew",
+    "experience":"Intermediate",
+    "systemNickname":"40Gal Mixed Reef",
+    "profilePicture":"https://i.ebayimg.com/images/g/iboAAOSw~e5ZOt-N/s-l300.jpg"
+  },
+
+  "socialMedia":{
+    "reef2reef": {
+      "nickname":"R2R",
+      "username":"andrewalex11",
+      "buildThread":"https://www.reef2reef.com/threads/40b-fixer-up.356249/"
+    },
+    "nanoreef": {
+      "nickname":"Nano-Reef",
+      "username":"andrewalex11",
+      "buildThread":"https://www.reef2reef.com/threads/40b-fixer-up.356249/"
+    },
+    "3Reef": {
+      "nickname":"3Reef",
+      "username":"andrewalex11",
+      "buildThread":"https://www.reef2reef.com/threads/40b-fixer-up.356249/"
+    }
+  }
+}

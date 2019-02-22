@@ -1,0 +1,15 @@
+.footer {
+  position: absolute;
+  font-family: $global-font;
+  font-size: 10px;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  color: white;
+  text-align: center;
+
+  a {
+    color: #ffc68a;
+    text-decoration: none;
+  }
+}
